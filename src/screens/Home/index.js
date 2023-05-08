@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from "react-native";
 
 import ClimaApi from '../../services/api/Clima/api'
+import DolarApi from '../../services/api/Dolar/api'
+
+import styles from "./styles";
 
 const Home = () => {
 
     const [climaVarivel, setClimaVariavel] = useState(null)
-    const [climaData, setClimaData] = useState(null)
+    const [climaData, setClimaData] = useState(false)
+    const [valorDolar, setValorDolar] = useState(false)
 
-    const Clima = async () => {
+    /*const Clima = async () => {
         try {
             var config = {
                 method: 'get',
@@ -29,21 +33,21 @@ const Home = () => {
         } catch (err) {
             console.log(err);
         }
-    }
+    }*/
 
     const ClimaVariavel = async () => {
         try {
             var config = {
                 method: 'get',
-                url: `/ncep-gfs/${climaVarivel}`
+                url: `/ncep-gfs/tmpsfc`
             };
 
             ClimaApi(config)
                 .then(function (response) {
-                    console.log('ClimaVariavel: ', response.data);
+                    console.log('ClimaVariavel: ', response.data[0]);
                     if (response.status == 200) {
-                        setClimaData(response.data)
-                        ClimaTempo()
+                        setClimaData(response.data[0])
+                        //ClimaTempo()
                     }
                 })
                 .catch(function (error) {
@@ -58,21 +62,14 @@ const Home = () => {
         try {
             var config = {
                 method: 'get',
-                url: `/ncep-gfs/${climaVarivel}/${climaData}/-45.9471/-21.4294`,
-                /*params: {
-                    variavel: climaVarivel,
-                    data: climaData,
-                    longitude: '-45.9471',
-                    latitude: '-21.4294'
-                    //lat: -21.4294, long: -45.9471
-                }*/
+                url: `/ncep-gfs/tmin2m/${climaData}/-45.9471/-21.4294`,
             };
 
             ClimaApi(config)
                 .then(function (response) {
                     console.log('ClimaTempo: ', response.data);
                     if (response.status == 200) {
-                        setClimaData(response.data)
+                        setClimaData(response.data[3])
                     }
                 })
                 .catch(function (error) {
@@ -83,14 +80,65 @@ const Home = () => {
         }
     }
 
+    const CotacaoDolar = async () => {
+        try {
+            var config = {
+                url: 'USD-BRL'
+            }
+
+            DolarApi(config)
+                .then(function (response) {
+                    console.log(response.data)
+                    setValorDolar(response.data.USDBRL)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     useEffect(() => {
-        Clima()
+        ClimaVariavel()
+        CotacaoDolar()
     }, [])
 
+    useEffect(() => {
+        ClimaTempo()
+    }, [climaData])
+
     return (
-        <View>
-            <Text>TELA HOME</Text>
-        </View>
+        <ScrollView style={styles.Container}>
+            <View style={styles.header}>
+                <Text style={{ color: '#fff' }}>Bem vindo, {'\n'}nome</Text>
+                <Text style={{ color: '#fff' }}>Menu</Text>
+            </View>
+            {climaData != false && valorDolar != false ?
+                <>
+                    <View>
+                        <Text style={{ color: '#fff' }}>{`Horas: ${climaData.horas} Tempo: ${climaData.valor}`}</Text>
+                    </View>
+
+                    <Text style={{ color: '#fff' }}>{`Valor do dolar: ${valorDolar.high}`}</Text>
+                </>
+                :
+                <ActivityIndicator size={25} color="#fff" style={{ paddingTop: 10 }} />
+            }
+
+            <TouchableOpacity style={styles.card}>
+                <Text style={styles.cardText}>Calcular previsão de Safra</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.card}>
+                <Text style={styles.cardText}>Calcular sementes por hectares</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.card}>
+                <Text style={styles.cardText}>Calculo de foliar</Text>
+            </TouchableOpacity>
+
+        </ScrollView>
     )
 }
 

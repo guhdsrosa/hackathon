@@ -10,7 +10,7 @@ const Login = () => {
 
     return(
         <ScrollView style={styles.Container}>
-            <Text style={styles.Logo}>LOGO</Text>
+            <Text style={styles.Logo}>Hackaton</Text>
 
             <TextInput
                 onChangeText={setEmail}
