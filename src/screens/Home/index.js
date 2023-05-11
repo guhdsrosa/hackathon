@@ -62,7 +62,7 @@ const Home = () => {
         try {
             var config = {
                 method: 'get',
-                url: `/ncep-gfs/tmin2m/${climaData}/-45.9471/-21.4294`,
+                url: `/ncep-gfs/tmpsfc/${climaData}/-45.9471/-21.4294`,
             };
 
             ClimaApi(config)
