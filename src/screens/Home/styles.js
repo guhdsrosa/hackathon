@@ -1,6 +1,14 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+
+    Container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        paddingTop: 50,
+        paddingHorizontal: 15
+    },
+
     header: {
         marginVertical: 20,
         flexDirection: 'row',
@@ -9,14 +17,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
-    Container: {
-        flex: 1,
-        backgroundColor: '#171717',
+    welcomeText: {
+        color: '#141414',
+        fontSize: 20,
+    },
+
+    climaContainer: {
+        //backgroundColor: '#ff5e00'
+        borderRadius: 12
+    },
+
+    climaText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 15,
+        fontWeight: 'bold',
+        paddingVertical: 10
     },
 
     card: {
-        backgroundColor: '#0b5626',
-        marginHorizontal: 15,
+        backgroundColor: '#ff5e00',
         marginVertical: 10,
         borderRadius: 15,
 

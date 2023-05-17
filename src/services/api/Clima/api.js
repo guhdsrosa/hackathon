@@ -8,7 +8,7 @@ const api = axios.create({
         password: '09260407!Gustavorosa',
     },
     headers: {
-        Authorization: 'Bearer cc334fb4-55c8-371a-b627-87945b5e48fc'
+        Authorization: 'Bearer 4ca3db1d-8d3b-3f2b-9aee-6cb0e1906dec'
     },
 })
 

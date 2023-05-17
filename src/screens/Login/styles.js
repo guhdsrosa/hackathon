@@ -3,13 +3,13 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
     Container: {
         flex: 1,
-        backgroundColor: '#171717',
+        backgroundColor: '#fff',
         paddingTop: 100
     },
 
     Logo: {
         textAlign: 'center',
-        color: '#fff',
+        color: '#141414',
         fontSize: 20,
         fontWeight: 'bold',
         paddingVertical: 60
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     },
 
     Button: {
-        backgroundColor: '#0b5626',
+        backgroundColor: '#ff5e00',
         marginHorizontal: 10,
         marginTop: 10,
         borderRadius: 10

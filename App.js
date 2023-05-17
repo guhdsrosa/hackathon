@@ -13,8 +13,10 @@ import CalcSafra from './src/screens/CalcSafra';
 import CalcHectare from './src/screens/CalcHectare';
 import CalcFoliar from './src/screens/CalcFoliar';
 
+import Routes from './src/routes'
+
 export default function App() {
   return(
-    <Home/>
+    <Routes/>
   )
 };

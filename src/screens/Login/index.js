@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import { View, TouchableOpacity, Text, TextInput, ScrollView } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import styles from './styles'
 
 const Login = () => {
-
+    const navigation = useNavigation()
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
+
+    const loginButton = () => {
+        navigation.navigate('Home')
+    }
 
     return(
         <ScrollView style={styles.Container}>
@@ -29,7 +34,7 @@ const Login = () => {
                 style={styles.TextInput}
             />
 
-            <TouchableOpacity style={styles.Button}>
+            <TouchableOpacity style={styles.Button} onPress={() => loginButton()}>
                 <Text style={styles.ButtonText}>Logar</Text>
             </TouchableOpacity>
 
