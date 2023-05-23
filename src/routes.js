@@ -19,7 +19,7 @@ function MyTabs() {
     return (
         <Tab.Navigator
             initialRouteName='Home'
-            activeColor='#ff5e00'
+            activeColor='#ffa500'
             barStyle={{backgroundColor: '#141414'}}
         >
             <Tab.Screen name="Home" component={Home} options={{tabBarLabel: 'Inicío'}}/>

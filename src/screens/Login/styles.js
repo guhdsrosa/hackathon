@@ -8,11 +8,10 @@ const styles = StyleSheet.create({
     },
 
     Logo: {
-        textAlign: 'center',
-        color: '#141414',
-        fontSize: 20,
-        fontWeight: 'bold',
-        paddingVertical: 60
+        width: 300, 
+        height: 90,
+        alignSelf: 'center',
+        paddingVertical: 80
     },
 
     TextInput: {
@@ -26,7 +25,7 @@ const styles = StyleSheet.create({
     },
 
     Button: {
-        backgroundColor: '#ff5e00',
+        backgroundColor: '#ffa500',
         marginHorizontal: 10,
         marginTop: 10,
         borderRadius: 10

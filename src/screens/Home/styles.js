@@ -20,23 +20,32 @@ const styles = StyleSheet.create({
     welcomeText: {
         color: '#141414',
         fontSize: 20,
+        fontWeight: '300'
     },
 
     climaContainer: {
-        //backgroundColor: '#ff5e00'
+        //backgroundColor: '#ffa500'
         borderRadius: 12
     },
 
     climaText: {
-        color: '#fff',
+        color: '#585958',
         textAlign: 'center',
-        fontSize: 15,
-        fontWeight: 'bold',
+        fontSize: 60,
+        fontWeight: '200',
+        paddingVertical: 10
+    },
+
+    dollarText: {
+        color: '#585958',
+        textAlign: 'center',
+        fontSize: 20,
+        fontWeight: '300',
         paddingVertical: 10
     },
 
     card: {
-        backgroundColor: '#ff5e00',
+        backgroundColor: '#ffa500',
         marginVertical: 10,
         borderRadius: 15,
 

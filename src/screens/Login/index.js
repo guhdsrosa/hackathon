@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, Text, TextInput, ScrollView } from "react-native";
+import { View, TouchableOpacity, Text, TextInput, ScrollView, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import logo from '../../assets/images/techagro.png'
 
 import styles from './styles'
 
@@ -15,7 +16,11 @@ const Login = () => {
 
     return(
         <ScrollView style={styles.Container}>
-            <Text style={styles.Logo}>Hackaton</Text>
+            <Image
+                source={logo}
+                style={styles.Logo}
+                resizeMode="contain"
+            />
 
             <TextInput
                 onChangeText={setEmail}

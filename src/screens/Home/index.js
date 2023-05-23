@@ -11,7 +11,7 @@ import styles from "./styles";
 const Home = () => {
     const navigation = useNavigation()
     const [climaVarivel, setClimaVariavel] = useState(null)
-    const [climaData, setClimaData] = useState(false)
+    const [climaData, setClimaData] = useState(null)
     const [valorDolar, setValorDolar] = useState(false)
     let hours = new Date().getHours();
     console.log('hours', hours)
@@ -81,13 +81,15 @@ const Home = () => {
 
                     if (response.status == 200) {
                         result.map((res) => {
-                            const horaApi = parseInt(res.horas)
-                            if (horas <= horaApi) {
-                                console.log('res', res)
+                            console.log('RES1', typeof res.horas)
+                            console.log('RES2', typeof hours)
+                            if (horasApi > horas) {
+                                setClimaData(res)
+                                console.log('RES', res)
                             }
                         })
-                        setClimaData(response.data[3])
-                        console.log('ClimaTempo: ', typeof climaData);
+                        //setClimaData(response.data[3])
+                        console.log('ClimaTempo: ', climaData);
                     }
 
 
@@ -109,7 +111,7 @@ const Home = () => {
             DolarApi(config)
                 .then(function (response) {
                     console.log(response.data)
-                    setValorDolar(response.data.USDBRL)
+                    setValorDolar(parseFloat(response.data.USDBRL.high))
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -135,15 +137,14 @@ const Home = () => {
             </View>
             {climaData != false && valorDolar != false ?
                 <>
-                    <LinearGradient colors={['#ff8000', '#ff5e00']} style={styles.climaContainer}>
-                        <Text style={styles.climaText}>{`Horas: ${climaData.horas}`}</Text>
-                        <Text style={styles.climaText}>{`Tempo: ${climaData.valor}`}</Text>
-                    </LinearGradient>
+                    <View style={styles.climaContainer}>
+                        <Text style={styles.climaText}>10ºc{/*`Tempo: ${climaData.valor}º`*/}</Text>
+                    </View>
 
-                    <Text style={{ color: '#141414' }}>{`Valor do dolar: ${valorDolar.high}`}</Text>
+                    <Text style={styles.dollarText}>{`Dolar: R$${valorDolar.toFixed(2)}`}</Text>
                 </>
                 :
-                <ActivityIndicator size={25} color="#ff5e00" style={{ paddingTop: 10 }} />
+                <ActivityIndicator size={25} color="#ffa500" style={{ paddingTop: 10 }} />
             }
 
             <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('CalcSafra')}>
