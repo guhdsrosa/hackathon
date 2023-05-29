@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -10,11 +10,13 @@ import styles from "./styles";
 
 const Home = () => {
     const navigation = useNavigation()
-    const [climaVarivel, setClimaVariavel] = useState(null)
-    const [climaData, setClimaData] = useState(null)
+    
+    const [climaVariavel, setClimaVariavel] = useState(null)
+    const [climaData, setClimaData] = useState({})
+    const [climaResponse, setClimaResponse] = useState([])
     const [valorDolar, setValorDolar] = useState(false)
+    const [refreshing, setRefreshing] = useState(false);
     let hours = new Date().getHours();
-    console.log('hours', hours)
 
     /*const Clima = async () => {
         try {
@@ -71,25 +73,17 @@ const Home = () => {
 
             ClimaApi(config)
                 .then(function (response) {
-                    const result = response.data
-                    const horas = hours
+                    //const result = response.data
+                    //const horas = hours
 
-                    if (horas == 0) {
-                        horas == 24
-                    }
+                    //if (horas == 0) {
+                    //    horas == 24
+                    //}
                     //console.log('ClimaTempo: ', response.data);
 
                     if (response.status == 200) {
-                        result.map((res) => {
-                            console.log('RES1', typeof res.horas)
-                            console.log('RES2', typeof hours)
-                            if (horasApi > horas) {
-                                setClimaData(res)
-                                console.log('RES', res)
-                            }
-                        })
-                        //setClimaData(response.data[3])
-                        console.log('ClimaTempo: ', climaData);
+                        setClimaResponse(response.data)
+
                     }
 
 
@@ -110,7 +104,6 @@ const Home = () => {
 
             DolarApi(config)
                 .then(function (response) {
-                    console.log(response.data)
                     setValorDolar(parseFloat(response.data.USDBRL.high))
                 })
                 .catch(function (error) {
@@ -121,6 +114,18 @@ const Home = () => {
         }
     }
 
+    const onRefresh = () => {
+        setRefreshing(true);
+
+        setClimaVariavel(null)
+        ClimaTempo()
+        CotacaoDolar()
+
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    };
+
     useEffect(() => {
         ClimaVariavel()
         CotacaoDolar()
@@ -130,18 +135,46 @@ const Home = () => {
         ClimaTempo()
     }, [climaData])
 
+    useEffect(() => {
+        if (hours === 0) {
+            hours = 24;
+        }
+
+        for (let i = 0; i < climaResponse.length; i++) {
+            const result = climaResponse[i];
+            const horasApi = parseInt(result.horas);
+
+            if (horasApi > hours) {
+                if (climaVariavel === null) {
+                    setClimaVariavel(result);
+                    console.log('RES', result);
+                    break;
+                }
+            }
+        }
+    }, [climaResponse])
+
     return (
-        <ScrollView style={styles.Container}>
+        <ScrollView
+            style={styles.Container}
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                />
+            }
+        >
             <View style={styles.header}>
                 <Text style={styles.welcomeText}><Text style={[styles.welcomeText, { fontWeight: 'bold' }]}>Bem vindo,</Text> {'\n'}Nome</Text>
             </View>
-            {climaData != false && valorDolar != false ?
+            {climaVariavel != null && valorDolar != null ?
                 <>
                     <View style={styles.climaContainer}>
-                        <Text style={styles.climaText}>10ºc{/*`Tempo: ${climaData.valor}º`*/}</Text>
+                        <Text style={styles.climaText}>{`${climaVariavel.valor}ºc`}</Text>
+                        <Text style={[styles.dollarText, { fontSize: 17, paddingVertical: 0 }]}>{`Horário das ${climaVariavel.horas}:00`}</Text>
                     </View>
 
-                    <Text style={styles.dollarText}>{`Dolar: R$${valorDolar.toFixed(2)}`}</Text>
+                    <Text style={styles.dollarText}>{`Cotação do dolar: R$${valorDolar.toFixed(2)}`}</Text>
                 </>
                 :
                 <ActivityIndicator size={25} color="#ffa500" style={{ paddingTop: 10 }} />

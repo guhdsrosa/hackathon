@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 60,
         fontWeight: '200',
-        paddingVertical: 10
+        paddingVertical: 0
     },
 
     dollarText: {
