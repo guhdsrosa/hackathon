@@ -5,10 +5,29 @@ import styles from "./styles";
 
 const CalcHectare = () => {
 
-    const [result, setResult] = useState(false)
+    const [result, setResult] = useState(null)
+    const [populacaoPlanta, setPopulacaoPlanta] = useState(null)
+    const [espacamentoLinha, setEspacamentoLinha] = useState(null)
+    const [numPlantaMetro, setNumPlantaMetro] = useState(null)
+    const [metroLineares, setMetroLineares] = useState(null)
 
     const Calcular = () => {
-        setResult(!result)
+        setResult('0')
+
+        var _result = 0
+        var _populacaoPlanta = populacaoPlanta?.replace(',', '.')
+        var _espacamentoLinha = espacamentoLinha?.replace(',', '.')
+        var _numPlantaMetro = 0
+        var _metroLineares = 0
+
+        _metroLineares = 1000 / _espacamentoLinha
+        setMetroLineares(`${_metroLineares.toFixed(1).replace('.', ',')}`)
+
+        _numPlantaMetro = _populacaoPlanta / _metroLineares
+        setNumPlantaMetro(`${_numPlantaMetro.toFixed(1).replace('.', ',')}`)
+
+        _result = _metroLineares * _numPlantaMetro
+        setResult(`${_result.toFixed(1).replace('.', ',')}`)
     }
 
     return (
@@ -16,18 +35,18 @@ const CalcHectare = () => {
             <Text style={styles.title}>Calcular Quantidade de Semente por hectare</Text>
 
             <TextInput
-                //onChangeText={'setEmail'}
-                //value={''}
-                placeholder="Peso dos grãos por planta"
+                onChangeText={setPopulacaoPlanta}
+                value={populacaoPlanta}
+                placeholder="Populaçao de plantas"
                 placeholderTextColor={'#787878'}
                 style={styles.TextInput}
                 keyboardType="decimal-pad"
             />
 
             <TextInput
-                //onChangeText={'setEmail'}
-                //value={''}
-                placeholder="Numero de planta por hectare"
+                onChangeText={setEspacamentoLinha}
+                value={espacamentoLinha}
+                placeholder="Espaçamento entre linhas (cm)"
                 placeholderTextColor={'#787878'}
                 style={styles.TextInput}
                 keyboardType="decimal-pad"
@@ -37,13 +56,32 @@ const CalcHectare = () => {
                 <Text style={styles.cardText}>Calcular</Text>
             </TouchableOpacity>
 
-            {result &&
+            {result != null &&
                 <>
                     <Text style={styles.resultText}>Resultado:</Text>
+
+                    <Text>Sementes / ha</Text>
                     <TextInput
-                        //onChangeText={'setEmail'}
-                        //value={''}
-                        placeholder="Resultado"
+                        value={result}
+                        placeholder="Sementes por hectare"
+                        placeholderTextColor={'#787878'}
+                        style={styles.TextInput}
+                        keyboardType="decimal-pad"
+                    />
+
+                    <Text>Números de plantas por metro</Text>
+                    <TextInput
+                        value={numPlantaMetro}
+                        placeholder="Números de plantas por metro"
+                        placeholderTextColor={'#787878'}
+                        style={styles.TextInput}
+                        keyboardType="decimal-pad"
+                    />
+
+                    <Text>Metros lineares</Text>
+                    <TextInput
+                        value={metroLineares}
+                        placeholder="Metros lineares"
                         placeholderTextColor={'#787878'}
                         style={styles.TextInput}
                         keyboardType="decimal-pad"

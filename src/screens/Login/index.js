@@ -1,20 +1,46 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, Text, TextInput, ScrollView, Image } from "react-native";
+import { View, TouchableOpacity, Text, TextInput, ScrollView, Image, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import logo from '../../assets/images/techagro.png'
+
+import callApi from '../../services/api/LogIn/api'
 
 import styles from './styles'
 
 const Login = () => {
     const navigation = useNavigation()
-    const [email, setEmail] = useState('')
-    const [senha, setSenha] = useState('')
+    const [cpf, setCpf] = useState(null)
+    const [senha, setSenha] = useState(null)
 
-    const loginButton = () => {
+    const loginPress = async () => {
+        try {
+            var config = {
+                method: 'get',
+                url: '/validateuser',
+                data: {
+                    CPF: '733.056.560-18',
+                    Password: '123123123'
+                }
+            };
+
+            callApi(config)
+                .then(function (response) {
+                    console.log(response)
+                    if(response.status == 200){
+                        navigation.navigate('Home')
+                    }
+                })
+                .catch(function (error) {
+                    console.log('error', error);
+                });
+        } catch (err) {
+            console.log(err);
+        }
+
         navigation.navigate('Home')
     }
 
-    return(
+    return (
         <ScrollView style={styles.Container}>
             <Image
                 source={logo}
@@ -23,9 +49,9 @@ const Login = () => {
             />
 
             <TextInput
-                onChangeText={setEmail}
-                value={email}
-                placeholder="Email"
+                onChangeText={setCpf}
+                value={cpf}
+                placeholder="CPF"
                 placeholderTextColor={'#787878'}
                 style={styles.TextInput}
             />
@@ -37,9 +63,10 @@ const Login = () => {
                 keyboardType="numeric"
                 placeholderTextColor={'#787878'}
                 style={styles.TextInput}
+                secureTextEntry={true}
             />
 
-            <TouchableOpacity style={styles.Button} onPress={() => loginButton()}>
+            <TouchableOpacity style={styles.Button} onPress={() => loginPress()}>
                 <Text style={styles.ButtonText}>Logar</Text>
             </TouchableOpacity>
 

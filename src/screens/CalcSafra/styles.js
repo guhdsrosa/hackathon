@@ -13,6 +13,62 @@ const styles = StyleSheet.create({
         paddingVertical: 50
     },
 
+    //Option
+    optionContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginBottom: 20
+    },
+
+    optionButtonSelect: {
+        backgroundColor: '#ffa500',
+        borderRadius: 10
+    },
+
+    optionButton: {
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        borderWidth: 0.5,
+        borderColor: '#141414'
+    },
+
+    optionTextSelect: {
+        color: '#fff',
+        textAlign: 'center',
+        paddingVertical: 15,
+        paddingHorizontal: 70,
+        fontSize: 15,
+        fontWeight: 'bold'
+    },
+
+    optionText: {
+        color: '#141414',
+        textAlign: 'center',
+        paddingVertical: 15,
+        paddingHorizontal: 70,
+        fontSize: 15,
+        fontWeight: '500'
+    },
+    //Option
+
+    titleText: {
+        color: '#141414',
+        textAlign: 'center',
+        paddingBottom: 20,
+        paddingHorizontal: 70,
+        fontSize: 18,
+        fontWeight: '400'
+    },
+
+    helpText: {
+        color: '#323232',
+        paddingBottom: 2,
+        paddingTop: 5,
+        paddingHorizontal: 10,
+        fontSize: 13,
+        fontWeight: '400'
+    },
+
     TextInput: {
         borderWidth: 1,
         marginHorizontal: 10,
