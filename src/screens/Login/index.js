@@ -15,17 +15,19 @@ const Login = () => {
     const loginPress = async () => {
         try {
             var config = {
-                method: 'get',
+                method: 'post',
                 url: '/validateuser',
                 data: {
-                    CPF: '733.056.560-18',
-                    Password: '123123123'
+                    CPF: cpf,
+                    Password: senha
                 }
             };
+            //CPF: '733.056.560-18',
+            //Password: '123123123'
 
             callApi(config)
                 .then(function (response) {
-                    console.log(response)
+                    console.log(response.data)
                     if(response.status == 200){
                         navigation.navigate('Home')
                     }
@@ -37,7 +39,7 @@ const Login = () => {
             console.log(err);
         }
 
-        navigation.navigate('Home')
+        //navigation.navigate('Home')
     }
 
     return (

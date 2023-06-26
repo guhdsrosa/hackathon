@@ -184,11 +184,11 @@ const Home = () => {
                 <Text style={styles.cardText}>Calcular previsão de Safra</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('CalcHectare')}>
                 <Text style={styles.cardText}>Calcular sementes por hectares</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('CalcFoliar')}>
                 <Text style={styles.cardText}>Calculo de foliar</Text>
             </TouchableOpacity>
 
