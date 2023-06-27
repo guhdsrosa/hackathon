@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer, useTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import Login from './screens/Login'
 import Home from './screens/Home';
@@ -20,12 +21,47 @@ function MyTabs() {
         <Tab.Navigator
             initialRouteName='Home'
             activeColor='#ffa500'
-            barStyle={{backgroundColor: '#141414'}}
+            barStyle={{ backgroundColor: '#141414' }}
         >
-            <Tab.Screen name="Home" component={Home} options={{tabBarLabel: 'Inicío'}}/>
-            <Tab.Screen name="CalcSafra" component={CalcSafra} options={{tabBarLabel: 'Safra'}}/>
-            <Tab.Screen name="CalcHectare" component={CalcHectare} options={{tabBarLabel: 'Hectare'}}/>
-            <Tab.Screen name="CalcFoliar" component={CalcFoliar} options={{tabBarLabel: 'Foliar'}}/>
+            <Tab.Screen
+                name="home" component={Home}
+                options={{ 
+                    tabBarLabel: 'Inicío',
+                    tabBarIcon: ({color}) => (
+                        <Icon name="home" size={30} color={color} />
+                    )
+                }}
+            />
+            <Tab.Screen
+                name="calcSafra"
+                component={CalcSafra}
+                options={{ 
+                    tabBarLabel: 'Safra',
+                    tabBarIcon: ({color}) => (
+                        <Icon name="equalizer" size={30} color={color} />
+                    )
+                }}
+            />
+            <Tab.Screen
+                name="calcHectare"
+                component={CalcHectare}
+                options={{ 
+                    tabBarLabel: 'Hectare',
+                    tabBarIcon: ({color}) => (
+                        <Icon name="terrain" size={30} color={color} />
+                    ) 
+                }}
+            />
+            <Tab.Screen
+                name="calcFoliar"
+                component={CalcFoliar}
+                options={{ 
+                    tabBarLabel: 'Foliar',
+                    tabBarIcon: ({color}) => (
+                        <Icon name="eco" size={30} color={color} />
+                    ) 
+                }}
+            />
         </Tab.Navigator>
     );
 }

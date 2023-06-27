@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Text, TextInput, ScrollView, Image, Alert } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import logo from '../../assets/images/techagro.png'
 
@@ -28,19 +29,40 @@ const Login = () => {
             callApi(config)
                 .then(function (response) {
                     console.log(response.data)
-                    if(response.status == 200){
+                    if (response.status == 200) {
                         navigation.navigate('Home')
+                        AsyncStorage.setItem('user', JSON.stringify(response.data));
+                    } else {
+                        Alert.alert('Erro', 'CPF ou senha podem estar incorretos')
                     }
                 })
                 .catch(function (error) {
                     console.log('error', error);
+                    Alert.alert('Erro', 'Ocorreu algum erro ao efetuar o login', [
+                        {
+                            text: 'Tentar Novamente',
+                        }
+                    ])
                 });
         } catch (err) {
             console.log(err);
         }
-
-        //navigation.navigate('Home')
     }
+
+    const getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('user');
+            if (value !== null) {
+                navigation.navigate('Home')
+            }
+        } catch (e) {
+            console.log('error async', e)
+        }
+    };
+
+    useEffect(() => {
+        getData()
+    }, [])
 
     return (
         <ScrollView style={styles.Container}>

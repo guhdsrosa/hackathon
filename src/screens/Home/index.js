@@ -1,92 +1,51 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import LinearGradient from 'react-native-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Geolocation from '@react-native-community/geolocation';
 
 import ClimaApi from '../../services/api/Clima/api'
 import DolarApi from '../../services/api/Dolar/api'
+import axios from "axios";
 
 import styles from "./styles";
 
 const Home = () => {
     const navigation = useNavigation()
-    
-    const [climaVariavel, setClimaVariavel] = useState(null)
-    const [climaData, setClimaData] = useState({})
-    const [climaResponse, setClimaResponse] = useState([])
+    const [user, setUser] = useState({})
+    const [positon, setPosition] = useState(null)
+    const [climaResponse, setClimaResponse] = useState(0)
+
     const [valorDolar, setValorDolar] = useState(false)
     const [refreshing, setRefreshing] = useState(false);
     let hours = new Date().getHours();
 
-    /*const Clima = async () => {
+    const getData = async () => {
         try {
-            var config = {
-                method: 'get',
-                url: '/ncep-gfs'
-            };
-
-            ClimaApi(config)
-                .then(function (response) {
-                    console.log('Clima: ', response.data);
-                    if (response.status == 200) {
-                        setClimaVariavel(response.data)
-                        ClimaVariavel()
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        } catch (err) {
-            console.log(err);
+            const value = await AsyncStorage.getItem('user');
+            if (value !== null) {
+                setUser(JSON.parse(value))
+            }
+        } catch (e) {
+            // error reading value
         }
-    }*/
-
-    const ClimaVariavel = async () => {
-        try {
-            var config = {
-                method: 'get',
-                url: `/ncep-gfs/tmpsfc`
-            };
-
-            ClimaApi(config)
-                .then(function (response) {
-                    console.log('ClimaVariavel: ', response.data[0]);
-                    if (response.status == 200) {
-                        setClimaData(response.data[0])
-                        //ClimaTempo()
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        } catch (err) {
-            console.log(err);
-        }
-    }
+    };
 
     const ClimaTempo = async () => {
         try {
             var config = {
                 method: 'get',
-                url: `/ncep-gfs/tmpsfc/${climaData}/-45.9471/-21.4294`,
+                url: `https://api.open-meteo.com/v1/forecast?latitude=${positon?.coords.latitude}&longitude=${positon?.coords.longitude}&hourly=temperature_2m&forecast_days=1`
             };
 
-            ClimaApi(config)
+            axios(config)
                 .then(function (response) {
-                    //const result = response.data
-                    //const horas = hours
+                    console.log('response', response.data.hourly.temperature_2m)
+                    const result = response.data.hourly.temperature_2m
 
-                    //if (horas == 0) {
-                    //    horas == 24
-                    //}
-                    //console.log('ClimaTempo: ', response.data);
-
-                    if (response.status == 200) {
-                        setClimaResponse(response.data)
-
-                    }
-
-
+                    console.log('result', result[hours])
+                    const _result = result[hours]
+                    setClimaResponse(_result)
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -117,7 +76,6 @@ const Home = () => {
     const onRefresh = () => {
         setRefreshing(true);
 
-        setClimaVariavel(null)
         ClimaTempo()
         CotacaoDolar()
 
@@ -127,32 +85,15 @@ const Home = () => {
     };
 
     useEffect(() => {
-        ClimaVariavel()
-        CotacaoDolar()
-    }, [])
+        Geolocation.getCurrentPosition(info => setPosition((info)))
+    },[])
 
     useEffect(() => {
+        //ClimaVariavel()
         ClimaTempo()
-    }, [climaData])
-
-    useEffect(() => {
-        if (hours === 0) {
-            hours = 24;
-        }
-
-        for (let i = 0; i < climaResponse.length; i++) {
-            const result = climaResponse[i];
-            const horasApi = parseInt(result.horas);
-
-            if (horasApi > hours) {
-                if (climaVariavel === null) {
-                    setClimaVariavel(result);
-                    console.log('RES', result);
-                    break;
-                }
-            }
-        }
-    }, [climaResponse])
+        CotacaoDolar()
+        getData()
+    }, [positon])
 
     return (
         <ScrollView
@@ -165,13 +106,13 @@ const Home = () => {
             }
         >
             <View style={styles.header}>
-                <Text style={styles.welcomeText}><Text style={[styles.welcomeText, { fontWeight: 'bold' }]}>Bem vindo,</Text> {'\n'}Nome</Text>
+                <Text style={styles.welcomeText}><Text style={[styles.welcomeText, { fontWeight: 'bold' }]}>Bem vindo,</Text> {'\n'}{user.name}</Text>
             </View>
-            {climaVariavel != null && valorDolar != null ?
+            {climaResponse != 0 && valorDolar != null ?
                 <>
                     <View style={styles.climaContainer}>
-                        <Text style={styles.climaText}>{`${climaVariavel.valor}ºc`}</Text>
-                        <Text style={[styles.dollarText, { fontSize: 17, paddingVertical: 0 }]}>{`Horário das ${climaVariavel.horas}:00`}</Text>
+                        <Text style={styles.climaText}>{`${climaResponse}ºc`}</Text>
+                        <Text style={[styles.dollarText, { fontSize: 13, paddingVertical: 0 }]}>{`Temperatura de 2 metros, horário das ${hours}:00 horas`}</Text>
                     </View>
 
                     <Text style={styles.dollarText}>{`Cotação do dolar: R$${valorDolar.toFixed(2)}`}</Text>
@@ -180,15 +121,15 @@ const Home = () => {
                 <ActivityIndicator size={25} color="#ffa500" style={{ paddingTop: 10 }} />
             }
 
-            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('CalcSafra')}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('calcSafra')}>
                 <Text style={styles.cardText}>Calcular previsão de Safra</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('CalcHectare')}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('calcHectare')}>
                 <Text style={styles.cardText}>Calcular sementes por hectares</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('CalcFoliar')}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('calcFoliar')}>
                 <Text style={styles.cardText}>Calculo de foliar</Text>
             </TouchableOpacity>
 

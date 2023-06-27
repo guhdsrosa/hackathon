@@ -9,16 +9,16 @@ const CalcSafra = () => {
     const [option, setOption] = useState('soja')
 
     //Soja
-    const [numHa, setNumHa] = useState(0)
-    const [numVagem, setNumVagem] = useState(0)
-    const [numGraoVagem, setNumGraoVagem] = useState(0)
-    const [peso1kSemente, setPeso1kSemente] = useState(0)
-    const [saca60kg, setSaca60kg] = useState(0)
+    const [numHa, setNumHa] = useState(null)
+    const [numVagem, setNumVagem] = useState(null)
+    const [numGraoVagem, setNumGraoVagem] = useState(null)
+    const [peso1kSemente, setPeso1kSemente] = useState(null)
+    const [saca60kg, setSaca60kg] = useState(null)
 
     //Milho
-    const [pesoMedioEspiga, setPesoMedioEspiga] = useState(0)
-    const [numPlantasHa, setNumPlantasHa] = useState(0)
-    const [sacaMilho, setSacaMilho] = useState(0)
+    const [pesoMedioEspiga, setPesoMedioEspiga] = useState(null)
+    const [numPlantasHa, setNumPlantasHa] = useState(null)
+    const [sacaMilho, setSacaMilho] = useState(null)
 
     const OptionSelect = ({ select }) => {
         if (select == 'soja')
