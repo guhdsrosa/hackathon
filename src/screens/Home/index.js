@@ -17,11 +17,11 @@ const Home = () => {
     const [positon, setPosition] = useState(null)
     const [climaResponse, setClimaResponse] = useState(0)
 
-    const [selected, setSelected] = useState('Temperatura 2m');
+    const [selected, setSelected] = useState('Temperatura 2 metros');
     const [optionSelect, setOptionSelect] = useState('temperature_2m');
 
     const data = [
-        { key: '1', value: 'Temperatura 2m' },
+        { key: '1', value: 'Temperatura 2 metros' },
         { key: '2', value: 'Umidade Relativa' },
         { key: '3', value: 'Probabilidade de Precipitação' },
         { key: '4', value: 'Evapotranspiração' },
@@ -176,7 +176,7 @@ const Home = () => {
     const onRefresh = () => {
         setRefreshing(true);
 
-        ClimaTempo()
+        setSelected('Temperatura 2 metros')
         CotacaoDolar()
 
         setTimeout(() => {
@@ -189,28 +189,23 @@ const Home = () => {
     }, [])
 
     useEffect(() => {
-        if (selected == 'Temperatura 2m') {
-            setOptionSelect('temperature_2m')
+        if (selected == 'Temperatura 2 metros') {
             ClimaTempoTemperatura()
         }
 
         if (selected == 'Umidade Relativa') {
-            setOptionSelect('relativehumidity_2m')
             ClimaTempoUmidade()
         }
 
         if (selected == 'Probabilidade de Precipitação') {
-            setOptionSelect('precipitation_probability')
             ClimaTempoProbabilidade()
         }
 
         if (selected == 'Evapotranspiração') {
-            setOptionSelect('evapotranspiration')
             ClimaTempoEvapotrans()
         }
 
         if (selected == 'Velocidade do vento') {
-            setOptionSelect('windspeed_10m')
             ClimaTempoVelocidade()
         }
     }, [selected])
@@ -233,21 +228,22 @@ const Home = () => {
         >
             <View style={styles.header}>
                 <Text style={styles.welcomeText}><Text style={[styles.welcomeText, { fontWeight: 'bold' }]}>Bem vindo,</Text> {'\n'}{user.name}</Text>
+                <TouchableOpacity style={styles.exitButtom} onPress={() => exitPress()}>
+                    <Text style={styles.exitText}>Sair</Text>
+                </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.exitButtom} onPress={() => exitPress()}>
-                <Text style={styles.exitText}>Sair</Text>
-            </TouchableOpacity>
-
-            <SelectList
-                setSelected={(val) => setSelected(val)}
-                data={data}
-                save="value"
-                placeholder="Temperatura 2m"
-                search={false}
-                dropdownTextStyles={{color: '#141414'}}
-                inputStyles={{color: '#141414'}}
-            />
+            <View style={{marginHorizontal: 15}}>
+                <SelectList
+                    setSelected={(val) => setSelected(val)}
+                    data={data}
+                    save="value"
+                    placeholder="Temperatura 2 metros"
+                    search={false}
+                    dropdownTextStyles={{ color: '#141414', fontSize: 16, fontWeight: '300' }}
+                    inputStyles={{ color: '#141414', fontSize: 16, fontWeight: '300' }}
+                />
+            </View>
 
             {climaResponse != 0 && valorDolar != null ?
                 <>
@@ -274,7 +270,7 @@ const Home = () => {
                 <Text style={styles.cardText}>Calculo de foliar</Text>
             </TouchableOpacity>
 
-            <Text style={[styles.cardText, { color: '#00000070', marginTop: '10%', fontWeight: '400' }]}>Valor do dolar retirado da awesomeapi.com.br</Text>
+            <Text style={[styles.cardText, { color: '#00000070', marginTop: 0, fontWeight: '400' }]}>Valor do dolar retirado da{'\n'}awesomeapi.com.br</Text>
         </ScrollView>
     )
 }

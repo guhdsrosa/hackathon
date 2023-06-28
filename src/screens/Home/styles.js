@@ -5,14 +5,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         paddingTop: 30,
-        paddingHorizontal: 15
+        //paddingHorizontal: 15
     },
 
     header: {
         marginVertical: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginHorizontal: 10,
+        marginHorizontal: 15,
         alignItems: 'center',
     },
 
@@ -31,14 +31,13 @@ const styles = StyleSheet.create({
     exitText: {
         paddingHorizontal: 20,
         paddingVertical: 6,
-        backgroundColor: '#f20000',
+        backgroundColor: '#f21b1b',
         borderRadius: 10,
         color: '#fff',
         fontWeight: 'bold'
     },
 
     climaContainer: {
-        //backgroundColor: '#ffa500'
         borderRadius: 12
     },
 
@@ -61,6 +60,7 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: '#ffa500',
         marginVertical: 10,
+        marginHorizontal: 15,
         borderRadius: 15,
 
         shadowColor: "#000",

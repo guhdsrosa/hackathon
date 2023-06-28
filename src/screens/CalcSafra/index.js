@@ -120,7 +120,7 @@ const CalcSafra = () => {
                     <TextInput
                         onChangeText={setSaca60kg}
                         value={saca60kg}
-                        placeholder="Saca de 60kg"
+                        placeholder="Peso da saca de soja"
                         placeholderTextColor={'#787878'}
                         style={styles.TextInput}
                         keyboardType="decimal-pad"
@@ -154,7 +154,7 @@ const CalcSafra = () => {
                     <TextInput
                         onChangeText={setSacaMilho}
                         value={sacaMilho}
-                        placeholder="Uma saca de milho"
+                        placeholder="Peso da saca de milho"
                         placeholderTextColor={'#787878'}
                         style={styles.TextInput}
                         keyboardType="decimal-pad"

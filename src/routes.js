@@ -23,6 +23,7 @@ function MyTabs() {
             initialRouteName='Home'
             activeColor='#ffa500'
             barStyle={{ backgroundColor: '#141414' }}
+            inactiveColor='#656565'
         >
             <Tab.Screen
                 name="home" component={Home}
