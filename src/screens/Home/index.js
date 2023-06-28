@@ -18,7 +18,6 @@ const Home = () => {
     const [climaResponse, setClimaResponse] = useState(0)
 
     const [selected, setSelected] = useState('Temperatura 2 metros');
-    const [optionSelect, setOptionSelect] = useState('temperature_2m');
 
     const data = [
         { key: '1', value: 'Temperatura 2 metros' },
@@ -176,7 +175,7 @@ const Home = () => {
     const onRefresh = () => {
         setRefreshing(true);
 
-        setSelected('Temperatura 2 metros')
+        setSelected(selected)
         CotacaoDolar()
 
         setTimeout(() => {
@@ -238,7 +237,7 @@ const Home = () => {
                     setSelected={(val) => setSelected(val)}
                     data={data}
                     save="value"
-                    placeholder="Temperatura 2 metros"
+                    placeholder={`${selected}`}
                     search={false}
                     dropdownTextStyles={{ color: '#141414', fontSize: 16, fontWeight: '300' }}
                     inputStyles={{ color: '#141414', fontSize: 16, fontWeight: '300' }}
