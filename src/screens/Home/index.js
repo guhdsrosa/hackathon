@@ -3,6 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, RefreshCon
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Geolocation from '@react-native-community/geolocation';
+import { SelectList } from 'react-native-dropdown-select-list'
 
 import ClimaApi from '../../services/api/Clima/api'
 import DolarApi from '../../services/api/Dolar/api'
@@ -15,6 +16,17 @@ const Home = () => {
     const [user, setUser] = useState({})
     const [positon, setPosition] = useState(null)
     const [climaResponse, setClimaResponse] = useState(0)
+
+    const [selected, setSelected] = useState('Temperatura 2m');
+    const [optionSelect, setOptionSelect] = useState('temperature_2m');
+
+    const data = [
+        { key: '1', value: 'Temperatura 2m' },
+        { key: '2', value: 'Umidade Relativa' },
+        { key: '3', value: 'Probabilidade de Precipitação' },
+        { key: '4', value: 'Evapotranspiração' },
+        { key: '5', value: 'Velocidade do vento' }
+    ]
 
     const [valorDolar, setValorDolar] = useState(false)
     const [refreshing, setRefreshing] = useState(false);
@@ -31,21 +43,97 @@ const Home = () => {
         }
     };
 
-    const ClimaTempo = async () => {
+    const ClimaTempoTemperatura = async () => {
         try {
             var config = {
                 method: 'get',
                 url: `https://api.open-meteo.com/v1/forecast?latitude=${positon?.coords.latitude}&longitude=${positon?.coords.longitude}&hourly=temperature_2m&forecast_days=1`
-            };
-
-            axios(config)
+            }
+            await axios(config)
                 .then(function (response) {
-                    console.log('response', response.data.hourly.temperature_2m)
                     const result = response.data.hourly.temperature_2m
-
-                    console.log('result', result[hours])
                     const _result = result[hours]
-                    setClimaResponse(_result)
+                    setClimaResponse(`${_result}ºc`)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const ClimaTempoUmidade = async () => {
+        try {
+            var config = {
+                method: 'get',
+                url: `https://api.open-meteo.com/v1/forecast?latitude=${positon?.coords.latitude}&longitude=${positon?.coords.longitude}&hourly=relativehumidity_2m&forecast_days=1`
+            }
+            await axios(config)
+                .then(function (response) {
+                    const result = response.data.hourly.relativehumidity_2m
+                    const _result = result[hours]
+                    setClimaResponse(`${_result}%`)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const ClimaTempoProbabilidade = async () => {
+        try {
+            var config = {
+                method: 'get',
+                url: `https://api.open-meteo.com/v1/forecast?latitude=${positon?.coords.latitude}&longitude=${positon?.coords.longitude}&hourly=precipitation_probability&forecast_days=1`
+            }
+            await axios(config)
+                .then(function (response) {
+                    const result = response.data.hourly.precipitation_probability
+                    const _result = result[hours]
+                    setClimaResponse(`${_result}%`)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const ClimaTempoEvapotrans = async () => {
+        try {
+            var config = {
+                method: 'get',
+                url: `https://api.open-meteo.com/v1/forecast?latitude=${positon?.coords.latitude}&longitude=${positon?.coords.longitude}&hourly=evapotranspiration&forecast_days=1`
+            }
+            await axios(config)
+                .then(function (response) {
+                    const result = response.data.hourly.evapotranspiration
+                    const _result = result[hours]
+                    setClimaResponse(`${_result}mm`)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const ClimaTempoVelocidade = async () => {
+        try {
+            var config = {
+                method: 'get',
+                url: `https://api.open-meteo.com/v1/forecast?latitude=${positon?.coords.latitude}&longitude=${positon?.coords.longitude}&hourly=windspeed_10m&forecast_days=1`
+            }
+            await axios(config)
+                .then(function (response) {
+                    const result = response.data.hourly.windspeed_10m
+                    const _result = result[hours]
+                    setClimaResponse(`${_result}km/h`)
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -63,7 +151,7 @@ const Home = () => {
 
             DolarApi(config)
                 .then(function (response) {
-                    setValorDolar(parseFloat(response.data.USDBRL.high))
+                    setValorDolar(parseFloat(response.data.USDBRL.ask))
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -71,6 +159,18 @@ const Home = () => {
         } catch (err) {
             console.log(err)
         }
+    }
+
+    const exitPress = () => {
+        Alert.alert('Deseja realmente sair?', 'Ao concordar você irá deslogar de sua conta.', [
+            { text: 'Mudei de ideia' },
+            { text: 'Sim', onPress: () => clearAsyncStorage() }
+        ])
+    }
+
+    const clearAsyncStorage = async () => {
+        AsyncStorage.clear();
+        navigation.navigate('Login')
     }
 
     const onRefresh = () => {
@@ -86,11 +186,37 @@ const Home = () => {
 
     useEffect(() => {
         Geolocation.getCurrentPosition(info => setPosition((info)))
-    },[])
+    }, [])
 
     useEffect(() => {
-        //ClimaVariavel()
-        ClimaTempo()
+        if (selected == 'Temperatura 2m') {
+            setOptionSelect('temperature_2m')
+            ClimaTempoTemperatura()
+        }
+
+        if (selected == 'Umidade Relativa') {
+            setOptionSelect('relativehumidity_2m')
+            ClimaTempoUmidade()
+        }
+
+        if (selected == 'Probabilidade de Precipitação') {
+            setOptionSelect('precipitation_probability')
+            ClimaTempoProbabilidade()
+        }
+
+        if (selected == 'Evapotranspiração') {
+            setOptionSelect('evapotranspiration')
+            ClimaTempoEvapotrans()
+        }
+
+        if (selected == 'Velocidade do vento') {
+            setOptionSelect('windspeed_10m')
+            ClimaTempoVelocidade()
+        }
+    }, [selected])
+
+    useEffect(() => {
+        ClimaTempoTemperatura()
         CotacaoDolar()
         getData()
     }, [positon])
@@ -108,14 +234,29 @@ const Home = () => {
             <View style={styles.header}>
                 <Text style={styles.welcomeText}><Text style={[styles.welcomeText, { fontWeight: 'bold' }]}>Bem vindo,</Text> {'\n'}{user.name}</Text>
             </View>
+
+            <TouchableOpacity style={styles.exitButtom} onPress={() => exitPress()}>
+                <Text style={styles.exitText}>Sair</Text>
+            </TouchableOpacity>
+
+            <SelectList
+                setSelected={(val) => setSelected(val)}
+                data={data}
+                save="value"
+                placeholder="Temperatura 2m"
+                search={false}
+                dropdownTextStyles={{color: '#141414'}}
+                inputStyles={{color: '#141414'}}
+            />
+
             {climaResponse != 0 && valorDolar != null ?
                 <>
                     <View style={styles.climaContainer}>
-                        <Text style={styles.climaText}>{`${climaResponse}ºc`}</Text>
-                        <Text style={[styles.dollarText, { fontSize: 13, paddingVertical: 0 }]}>{`Temperatura de 2 metros, horário das ${hours}:00 horas`}</Text>
+                        <Text style={styles.climaText}>{`${climaResponse}`}</Text>
+                        <Text style={[styles.dollarText, { fontSize: 13, paddingVertical: 0 }]}>{`${selected}, horário das ${hours}:00 horas`}</Text>
                     </View>
 
-                    <Text style={styles.dollarText}>{`Cotação do dolar: R$${valorDolar.toFixed(2)}`}</Text>
+                    <Text style={styles.dollarText}>{`Valor do dolar: R$${valorDolar.toFixed(2)}`}</Text>
                 </>
                 :
                 <ActivityIndicator size={25} color="#ffa500" style={{ paddingTop: 10 }} />
@@ -133,6 +274,7 @@ const Home = () => {
                 <Text style={styles.cardText}>Calculo de foliar</Text>
             </TouchableOpacity>
 
+            <Text style={[styles.cardText, { color: '#00000070', marginTop: '10%', fontWeight: '400' }]}>Valor do dolar retirado da awesomeapi.com.br</Text>
         </ScrollView>
     )
 }

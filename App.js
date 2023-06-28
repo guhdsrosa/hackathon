@@ -7,12 +7,6 @@
 
 import React from 'react';
 
-import Login from './src/screens/Login'
-import Home from './src/screens/Home';
-import CalcSafra from './src/screens/CalcSafra';
-import CalcHectare from './src/screens/CalcHectare';
-import CalcFoliar from './src/screens/CalcFoliar';
-
 import Routes from './src/routes'
 
 export default function App() {

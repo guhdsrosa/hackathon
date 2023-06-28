@@ -9,6 +9,7 @@ import Home from './screens/Home';
 import CalcSafra from './screens/CalcSafra';
 import CalcHectare from './screens/CalcHectare';
 import CalcFoliar from './screens/CalcFoliar';
+import LocationPermissionScreen from './screens/LocalConfirm';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -75,6 +76,7 @@ function App() {
                 <Stack.Screen name="CalcSafra" component={MyTabs} options={{ headerShown: false }} />
                 <Stack.Screen name="CalcHectare" component={MyTabs} options={{ headerShown: false }} />
                 <Stack.Screen name="CalcFoliar" component={MyTabs} options={{ headerShown: false }} />
+                <Stack.Screen name="LocationPermissionScreen" component={LocationPermissionScreen} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

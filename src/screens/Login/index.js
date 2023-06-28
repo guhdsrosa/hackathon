@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Text, TextInput, ScrollView, Image, Alert } from "react-native";
+import { TouchableOpacity, Text, TextInput, ScrollView, Image, Alert } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
+import { TextInputMask } from 'react-native-masked-text'
+
 import logo from '../../assets/images/techagro.png'
 
 import callApi from '../../services/api/LogIn/api'
@@ -23,21 +25,19 @@ const Login = () => {
                     Password: senha
                 }
             };
-            //CPF: '733.056.560-18',
-            //Password: '123123123'
 
             callApi(config)
                 .then(function (response) {
                     console.log(response.data)
                     if (response.status == 200) {
-                        navigation.navigate('Home')
+                        getLocal()
                         AsyncStorage.setItem('user', JSON.stringify(response.data));
                     } else {
                         Alert.alert('Erro', 'CPF ou senha podem estar incorretos')
                     }
                 })
                 .catch(function (error) {
-                    console.log('error', error);
+                    console.log('error', error.response.data);
                     Alert.alert('Erro', 'Ocorreu algum erro ao efetuar o login', [
                         {
                             text: 'Tentar Novamente',
@@ -47,6 +47,7 @@ const Login = () => {
         } catch (err) {
             console.log(err);
         }
+        //navigation.navigate('Home')
     }
 
     const getData = async () => {
@@ -54,6 +55,19 @@ const Login = () => {
             const value = await AsyncStorage.getItem('user');
             if (value !== null) {
                 navigation.navigate('Home')
+            }
+        } catch (e) {
+            console.log('error async', e)
+        }
+    };
+
+    const getLocal = async () => {
+        try {
+            const value = await AsyncStorage.getItem('localAccept');
+            if (value !== null) {
+                navigation.navigate('Home')
+            } else {
+                navigation.navigate('LocationPermissionScreen')
             }
         } catch (e) {
             console.log('error async', e)
@@ -72,19 +86,20 @@ const Login = () => {
                 resizeMode="contain"
             />
 
-            <TextInput
-                onChangeText={setCpf}
+            <TextInputMask
+                type={'cpf'}
                 value={cpf}
                 placeholder="CPF"
-                placeholderTextColor={'#787878'}
+                onChangeText={setCpf}
+                keyboardType="numeric"
                 style={styles.TextInput}
+                placeholderTextColor={'#787878'}
             />
 
             <TextInput
                 onChangeText={setSenha}
                 value={senha}
                 placeholder="Senha"
-                keyboardType="numeric"
                 placeholderTextColor={'#787878'}
                 style={styles.TextInput}
                 secureTextEntry={true}

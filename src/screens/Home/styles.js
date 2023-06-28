@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-
     Container: {
         flex: 1,
         backgroundColor: '#fff',
@@ -21,6 +20,21 @@ const styles = StyleSheet.create({
         color: '#141414',
         fontSize: 20,
         fontWeight: '300'
+    },
+
+    exitButtom: {
+        position: 'absolute',
+        right: 0,
+        marginTop: 10
+    },
+
+    exitText: {
+        paddingHorizontal: 20,
+        paddingVertical: 6,
+        backgroundColor: '#f20000',
+        borderRadius: 10,
+        color: '#fff',
+        fontWeight: 'bold'
     },
 
     climaContainer: {

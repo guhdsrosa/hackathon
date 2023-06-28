@@ -170,7 +170,7 @@ const CalcSafra = () => {
                 <>
                     <Text style={styles.resultText}>Resultado:</Text>
                     <TextInput
-                        value={result}
+                        value={`${result} SC/h`}
                         //placeholder="Resultado"
                         placeholderTextColor={'#787878'}
                         style={styles.TextInput}

@@ -56,7 +56,7 @@ const CalcFoliar = () => {
             <TextInput
                 onChangeText={setEspacamentoLinha}
                 value={espacamentoLinha}
-                placeholder="Espaçamento entre linha"
+                placeholder="Faixa de aplicação"
                 placeholderTextColor={'#787878'}
                 style={styles.TextInput}
                 keyboardType="decimal-pad"

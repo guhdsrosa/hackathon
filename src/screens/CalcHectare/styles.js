@@ -53,6 +53,13 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         fontSize: 15,
         color: '#141414'
+    },
+
+    resultTitle: {
+        marginVertical: 3,
+        fontSize: 15,
+        color: '#141414',
+        marginHorizontal: 12
     }
 })
 

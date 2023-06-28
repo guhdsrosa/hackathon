@@ -60,7 +60,7 @@ const CalcHectare = () => {
                 <>
                     <Text style={styles.resultText}>Resultado:</Text>
 
-                    <Text>Sementes / ha</Text>
+                    <Text style={styles.resultTitle}>Sementes / ha</Text>
                     <TextInput
                         value={result}
                         placeholder="Sementes por hectare"
@@ -69,7 +69,7 @@ const CalcHectare = () => {
                         keyboardType="decimal-pad"
                     />
 
-                    <Text>Números de plantas por metro</Text>
+                    <Text style={styles.resultTitle}>Números de plantas por metro</Text>
                     <TextInput
                         value={numPlantaMetro}
                         placeholder="Números de plantas por metro"
@@ -78,7 +78,7 @@ const CalcHectare = () => {
                         keyboardType="decimal-pad"
                     />
 
-                    <Text>Metros lineares</Text>
+                    <Text style={styles.resultTitle}>Metros lineares</Text>
                     <TextInput
                         value={metroLineares}
                         placeholder="Metros lineares"
